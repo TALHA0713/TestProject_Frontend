@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { FaSearch, FaChevronDown, FaSyncAlt } from 'react-icons/fa';
 // import ProjectModal from '../../Modal/ProjectModal';
-import NewBugModal from '../../Modal/NewBugModal';
-
+// import NewBugModal from '../../Modal/NewBugModal';
+import BugDetail from '../../Modal/BugDetail';
+// import NewBugModal from '../../Modal/NewBugModal';
 
 const AllProject = () => {
 
@@ -64,7 +65,7 @@ const AllProject = () => {
         </div>
       </div>
 
-      <NewBugModal open={open} handleClose={handleClose} />
+      <BugDetail open={open} handleClose={handleClose} />
     </div>
   );
 };

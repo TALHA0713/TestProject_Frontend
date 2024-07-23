@@ -12,21 +12,24 @@ export default {
       fontSize: {
         'custom-lg': '28px',
         'custom-sm': '16px',
-        'custom-p': '14px', // New font size for p
+        'custom-p': '14px',
       },
       lineHeight: {
         'custom-lg': '42px',
         'custom-sm': '28px',
-        'custom-p': '21px', // New line height for p
+        'custom-p': '21px',
       },
       fontWeight: {
         'bold': 700,
         'normal': 400,
-        'medium': 500, // New font weight for h1
+        'medium': 500,
       },
       textColor: {
         'custom-text-lg': 'rgba(47, 51, 103, 1)',
         'custom-text-sm': 'rgba(134, 146, 166, 1)',
+      },
+      backgroundColor: {
+        'custom-bg': 'rgba(223, 222, 224, 1)',
       },
     },
   },
