@@ -24,7 +24,7 @@ const Navbar = () => {
             < TbBrandDatabricks className='gap-3 hover:text-blue-600' />
             <span className='text-custom-sm' >Projects</span>
           </Link>
-          <Link to="Task" className="flex items-center space-x-2 text-gray-600 ">
+          <Link to="/Task" className="flex items-center space-x-2 text-gray-600 ">
             <BsCardChecklist className='hover:text-blue-600' />
             <span className='text-custom-sm'>Tasks</span>
           </Link>
