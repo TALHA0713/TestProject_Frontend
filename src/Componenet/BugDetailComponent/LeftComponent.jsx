@@ -1,7 +1,7 @@
-import Avatar from "../Componenet/Avatar/AvatarCompnent";
+import Avatar from "../Avatar/AvatarCompnent";
 import { IoIosMore } from "react-icons/io";
 import { FaUpload } from "react-icons/fa";
-import LastPart from "../Componenet/NewBugModalComponent/LastPart";
+import LastPart from "../NewBugModalComponent/LastPart";
 
 function LeftComponent() {
     const data = [

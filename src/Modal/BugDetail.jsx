@@ -1,8 +1,8 @@
 import { Modal } from "@mui/material";
 import { RxCross1 } from "react-icons/rx";
-import LeftComponent from "../BugDetailComponent/LeftComponent";
-import RightComponent from "../BugDetailComponent/RightComponent";
-// eslint-disable-next-line react/prop-types
+import LeftComponent from "../Componenet/BugDetailComponent/LeftComponent";
+import RightComponent from "../Componenet/BugDetailComponent/RightComponent";
+
 const BugDetail = ({ open, handleClose }) => {
   return (
     <Modal

@@ -15,9 +15,9 @@ export default {
         'custom-p': '14px',
       },
       lineHeight: {
-        'custom-lg': '42px',
-        'custom-sm': '28px',
-        'custom-p': '21px',
+        'custom-lg': '48px',
+        'custom-sm': '32px',
+        'custom-p': '16px',
       },
       fontWeight: {
         'bold': 700,
