@@ -109,13 +109,13 @@ function SignIn() {
             <FaGreaterThan className="ml-3" />
           </button>
 
-          <hr className="border mt-4 border-gray-400" />
+          <hr className=" mt-4" />
 
           <div className="flex items-center mt-4">
             <p className="font-poppins text-custom-sm font-normal leading-custom-sm text-left text-custom-text-sm">
               Don’t have an account?
             </p>
-            <Link to="/SignUp" className="text-blue-500 hover:underline ml-auto">
+            <Link to="/signUp" className="text-blue-500 hover:underline ml-auto">
               Create account
             </Link>
           </div>

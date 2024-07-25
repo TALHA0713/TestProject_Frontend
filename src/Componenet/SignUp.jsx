@@ -6,6 +6,7 @@ import { FaUserAlt } from "react-icons/fa";
 import { IoPhonePortrait } from "react-icons/io5";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 function SignUp() {
   const validationSchema = Yup.object().shape({
@@ -179,9 +180,9 @@ function SignUp() {
             <p className="font-poppins text-custom-sm font-normal leading-custom-sm text-left text-custom-text-sm">
               Already have an account?
             </p>
-            <a href="/" className="text-blue-500 hover:underline ml-auto">
+            <Link to="/signIn" className="text-blue-500 hover:underline ml-auto">
               Login to your account
-            </a>
+            </Link>
           </div>
         </div>
       </form>

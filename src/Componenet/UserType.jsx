@@ -1,95 +1,72 @@
 import img1 from "../images/left.jpg";
+import { FaArrowRight } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
+import { Link } from 'react-router-dom';
+
 
 function UserType() {
+  let data = ["Developer","QA","MANAGER"];
   return (
     //  left side
-    <div className="w-screen h-screen border-2 border-red-500 flex">
-      <div className="flex border-2 border-green-500 w-[40%]">
+    <div className="w-screen h-screen flex">
+      <div className="flex  w-[40%]">
         <img src={img1} alt="image left side" className="h-auto w-full" />
       </div>
 
      {/* Right Side */}
-      <div className="flex border-2 border-yellow-500 w-[60%] items-center justify-center">
-        
-        <div className="w-3/5 md:w-2/5 h-auto bg-white border-2 border-gray-500 p-4 rounded-lg">
-          <p className="font-poppins text-custom-lg font-bold leading-custom-lg text-custom-text-lg mb-4">
-            Join Us!
-          </p>
+     <div className="flex flex-col  w-[60%] relative">
 
-          <p className="font-poppins text-custom-sm font-normal leading-custom-sm text-left text-custom-text-sm mb-4">
-            To begin this journey, tell us what type of account you’d be
-            opening.
-          </p>
+  <div className="flex justify-end p-4">
+    <div className="font-poppins text-right text-gray-400 text-2xl p-4">
+      Already have an account?{' '}
+      <span className="text-blue-500 hover:underline">
+        <Link to="/signIn">Sign In</Link>
+      </span>
+    </div>
+  </div>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-4 border-2 border-blue-500 p-4 flex-1 rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px]">
-              <img
-                src="../images/Polygon 1.svg"
-                alt="background"
-                className="w-10 h-10 mt-4"
-              />
-              <div>
-                <h1 className="font-poppins text-custom-text-lg text-lg font-bold">
-                  Manager
-                </h1>
-                <p className="font-poppins text-sm text-custom-text-sm">
-                  Signup as a manager to manage the tasks and bugs
-                </p>
-              </div>
+  {/* Existing Content */}
+  <div className="flex flex-grow justify-center items-center w-full"> 
+    <div className="w-3/5 md:w-2/5 h-auto bg-white  p-4 rounded-lg">
+      
+      <p className="font-poppins text-custom-lg font-bold  mb-4">
+        Join Us!
+      </p>
 
-              <img
-                src="../images/arrow-right.svg"
-                alt="arrow"
-                className="w-6 h-6 mt-4"
-              />
-            </div>
+      <p className="font-poppins text-custom-text-sm ">
+        To begin this journey, tell us what type of account you’d be opening.
+      </p>
 
-            <div className="flex items-center gap-4 border-2 border-blue-500 p-4 flex-1 rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px]">
-              <img
-                src="../images/Polygon 1.svg"
-                alt="background"
-                className="w-10 h-10 mt-4"
-              />
-              <div>
-                <h1 className="font-poppins text-custom-text-lg text-lg font-bold">
-                Developer
-                </h1>
-                <p className="font-poppins text-sm text-custom-text-sm">
-                Signup as a manager to manage the tasks and bugs
-                </p>
-              </div>
+      <div className="flex flex-col gap-4 mt-5">
+      {data.map((role, index) => (
+        <div
+          key={index}
+          className="flex items-center gap-4 border-2 hover:border-blue-500 p-4 flex-1 hover:bg-gray-100 rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px] group"
+        >
+          <div className="flex-shrink-0">
+            <FiUser className="w-7 h-7 text-blue-500" />
+          </div>
+          <div className="flex-1">
+            <h1 className="font-poppins text-custom-text-lg text-lg font-bold">
+              {role}
+            </h1>
+            <p className="font-poppins text-sm text-custom-text-sm">
+              Signup as a {role.toLowerCase()} to manage tasks and bugs
+            </p>
+          </div>
+          <div className="flex-shrink-0">
+          <FaArrowRight className="w-6 h-6 mt-4 text-gray-600 opacity-0 group-hover:opacity-100 group-hover:text-blue-500 transition-opacity duration-300" />
 
-              <img
-                src="../images/arrow-right.svg"
-                alt="arrow"
-                className="w-6 h-6 mt-4"
-              />
-            </div>
-
-            <div className="flex items-center gap-4 border-2 border-blue-500 p-4 flex-1 rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px]">
-              <img
-                src="../images/Polygon 1.svg"
-                alt="background"
-                className="w-10 h-10 mt-4"
-              />
-              <div>
-                <h1 className="font-poppins text-custom-text-lg text-lg font-bold">
-                QA
-                </h1>
-                <p className="font-poppins text-sm text-custom-text-sm">
-                Signup as a manager to manage the tasks and bugs
-                </p>
-              </div>
-
-              <img
-                src="../images/arrow-right.svg"
-                alt="arrow"
-                className="w-6 h-6 mt-4"
-              />
-            </div>
           </div>
         </div>
+      ))}
+        
       </div>
+    </div>
+  </div>
+</div>
+
+
     </div>
   );
 }
