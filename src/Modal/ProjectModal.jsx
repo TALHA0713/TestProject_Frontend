@@ -12,7 +12,7 @@ const ProjectModal = ({ open, handleClose }) => {
     name: '',
     detail: '',
     manager_id: '',
-    ss: 'hi' // Assuming 'ss' is another form field; adjust as needed
+    ss: 'hi' 
   });
 
   const [isPending, setIsPending] = useState(false);
@@ -100,7 +100,7 @@ const ProjectModal = ({ open, handleClose }) => {
       onClose={handleClose}
       className="flex items-center justify-center"
     >
-      <div className="project-modal bg-white rounded-md shadow-lg h-[400px] w-[800px] p-8">
+      <div className="project-modal bg-white rounded-md shadow-lg h-[500px] w-[800px] p-8">
         <h2 className="text-2xl mb-4 text-left">Add new Project</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
@@ -140,6 +140,7 @@ const ProjectModal = ({ open, handleClose }) => {
                   placeholder="Enter details here"
                 />
               </div>
+              
             </div>
 
             {/* Right side */}
