@@ -1,47 +1,19 @@
-
-import { Avatar } from "@mui/material";
 import { CiCalendarDate } from "react-icons/ci";
 import { useState } from "react";
-
+import AvatarGroup from '../Avatar/AvatarGroup'
 function MiddlePart() {
 
-    const [showCalendar, setShowCalendar] = useState(false);
-
-
+  const [showCalendar, setShowCalendar] = useState(false);
   const handleCalendarClick = () => {
     setShowCalendar(!showCalendar);
   };
-
-
-  const data = [
-    {
-      uri: "https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/img/jgreiner.png",
-      alt: "hello",
-    },
-    {
-      uri: "https://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/img/jgreiner.png",
-      alt: "hello",
-    },
-    {
-      uri: "",
-      alt: "hello",
-    },
-    {
-      uri: "https://commondatastorage.googleapis.com/codeskulptor-assets/lathrop/asteroid_blue.png",
-      alt: "hello",
-    },
-  ];
-
   return (
    <>
         
         <div className="flex items-center py-5 px-5 space-x-4">
             <h1 className="mr-7">Assign to</h1>
             <div className="flex items-center">
-              {data &&
-                data.map((item, index) => (
-                  <Avatar key={index} uri={item.uri} alt={item.alt} />
-                ))}
+             <AvatarGroup/>
             </div>
             <h1 className="ml-7">Add Due Date</h1>
             <div

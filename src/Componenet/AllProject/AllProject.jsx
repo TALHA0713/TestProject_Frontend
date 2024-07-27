@@ -1,11 +1,39 @@
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import { FaSearch, FaChevronDown} from 'react-icons/fa';
 import ProjectModal from '../../Modal/ProjectModal';
 import Group from '../../assets/Group.png'
 import Card from '../Card/Card'
+import axios from 'axios';
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 
 // eslint-disable-next-line react/prop-types
 const AllProject = ({propHandleClose,propOpen}) => {
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in session storage.");
+          window.location.href = "/signIn"; // Fix URL typo
+        }
+
+        const response = await axios.get("http://localhost:4444/api/getProjects");
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -61,14 +89,28 @@ const AllProject = ({propHandleClose,propOpen}) => {
         </button>
       </div>
 
-      {/* Card Grid Section */}
-      <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-12 " >
-       
-        <Card />
-        <Card />
-        <Card />
-      </div>
-
+      { !loading ?(
+        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-12 " >
+       {data.map((item, index) => (
+         <Card
+           key={index}
+           title={item.name}
+           description={item.detail}
+           taskDone={item.taskDone} 
+         />
+       ))}
+       </div>
+      ):(
+        (
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )
+      )}
+     
       {/* BugDetail Component */}
       <ProjectModal open={isDetailOpen} handleClose={handleBugDetailClose} />
 

@@ -1,23 +1,75 @@
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link,} from 'react-router-dom'; // Import Link from react-router-dom
 import img1 from "../images/left.jpg";
 import { IoIosLock } from "react-icons/io";
 import { FaGreaterThan } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { useFormik } from "formik";
+// import { useNavigate } from 'react-router-dom';
+import {  useState } from 'react';
+import { Spinner } from "@material-tailwind/react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 
 function SignIn() {
+  const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
   });
+  
 
-  const handleSubmitForm = (values) => {
-    console.log(values);
+  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setLoading(true);
+      const formData = {
+        ...values,
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      };
+      const response = await fetch(
+        "http://localhost:4444/auth/login",
+        requestOptions
+      );
+      const responseBody = await response.json();
+      setLoading(false);
+
+      if (!response.ok) {
+        if (responseBody.statusCode == 402) {
+          toast.error("email not found", { autoClose: 2000 });
+        } else if (responseBody.statusCode == 401) {
+          toast.error("invalid Password", { autoClose: 2000 });
+        }
+        return;
+      }
+
+      const token = JSON.stringify(responseBody);
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("loggedIn",true);
+      window.location.href = "/app"
+      resetForm();
+      // navigate('/app')
+
+    } catch (error) {
+      toast.error("Server Does not response Plz try again later", {
+        autoClose: 2000,
+      });
+      setLoading(false);
+      console.error("There was a problem with the POST request:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
-
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -27,7 +79,7 @@ function SignIn() {
     onSubmit: handleSubmitForm,
   });
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } = formik;
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit,isSubmitting } = formik;
 
   return (
     <div className="w-screen h-screen flex">
@@ -103,8 +155,15 @@ function SignIn() {
 
           <button
             type="submit"
+            disabled={isSubmitting || loading} 
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md flex items-center justify-center w-[30%] text-sm transition-colors duration-300 ease-in-out"
           >
+             {loading && (
+              <span className="mr-4">
+                <Spinner color="blue" />
+              </span>
+            )}
+
             Login
             <FaGreaterThan className="ml-3" />
           </button>
@@ -115,12 +174,13 @@ function SignIn() {
             <p className="font-poppins text-custom-sm font-normal leading-custom-sm text-left text-custom-text-sm">
               Don’t have an account?
             </p>
-            <Link to="/signUp" className="text-blue-500 hover:underline ml-auto">
+            <Link to="/" className="text-blue-500 hover:underline ml-auto">
               Create account
             </Link>
           </div>
         </div>
       </form>
+      <ToastContainer position="top-right" style={{ marginTop: "0rem" }} />
     </div>
   );
 }

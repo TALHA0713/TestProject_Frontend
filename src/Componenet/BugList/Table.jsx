@@ -1,17 +1,22 @@
-/* eslint-disable no-unused-vars */
-// import { Avatar } from "@mui/material";
 import AvatarGroup from "../Avatar/AvatarGroup";
-import { FaEllipsisV, FaRegCalendarMinus } from "react-icons/fa";
-import Menu from './Menu'
-import { useState,useEffect,useRef } from "react";
-// eslint-disable-next-line react/prop-types
-function Table({onClose}) {
+import { FaEllipsisV } from "react-icons/fa";
+import Menu from "./Menu";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
+import { toast } from "react-toastify"; // Add toast for error notifications
 
+// eslint-disable-next-line react/prop-types
+function Table() {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const menuRef = useRef(null);
 
   const handleToggleMenu = (index) => {
-    setOpenMenuIndex(prevIndex => prevIndex === index ? null : index);
+    setOpenMenuIndex((prevIndex) => (prevIndex === index ? null : index));
   };
 
   const handleClickOutside = (event) => {
@@ -21,105 +26,163 @@ function Table({onClose}) {
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleCloseMenu = () => {
     setOpenMenuIndex(null);
   };
-  
-    const rows = [
-        { details: "Convert the audio file received from Mobile afile received from Mobile afile received from Mobile afile received from Mobile afile received from Mobile afile received from Mobile audio  ", state: "Bug", status: "Pending", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "In progress", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Feature", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Pending", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Bug", status: "Closed", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-        { details: "Convert the audio file received from Mobile", state: "Feature", status: "Pending", dueDate: "", assignedTo: ["user1.jpg", "user2.jpg"] },
-      ];
-    
-      const getStatusColor = (status) => {
-        switch (status) {
-          case 'Pending':
-            return 'text-red-500 bg-red-100';
-          case 'In progress':
-            return 'text-blue-500 bg-blue-100';
-          case 'Closed':
-            return 'text-green-500 bg-green-100';
-          default:
-            return '';
-        }
-      };
 
-      const truncateText = (text, wordLimit = 8) => {
-        const words = text.split(' ');
-        if (words.length > wordLimit) {
-          return words.slice(0, wordLimit).join(' ') + '...';
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+          console.error("No token found in session storage.");
+          window.location.href = "/signIn";
         }
-        return text;
-      };
 
+        const response = await axios.get("http://localhost:4444/api/getBugs");
+        setData(response.data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError("Error fetching data. Please try again later.");
+        toast.error("Error fetching data. Please try again later.");
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  function formatDate(datetime) {
+    const date = new Date(datetime);
+    if (isNaN(date.getTime())) {
+      return 'Invalid date';
+    }
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "new":
+        return "text-red-500 bg-red-100";
+      case "started":
+        return "text-blue-500 bg-blue-100";
+      case "resolved":
+        return "text-green-500 bg-green-100";
+      default:
+        return "";
+    }
+  };
+
+  const truncateText = (text, wordLimit = 8) => {
+    const words = text.split(" ");
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(" ") + "...";
+    }
+    return text;
+  };
 
   return (
-    <section className='container mx-auto justify-between items-center py-4 '>
-    {/* <div className="overflow-x-auto"> */}
-      <table className="  w-full bg-white border border-gray-200  ">
-        <thead className='bg-gray-100 text-sm text-gray-500'>
-          <tr>
-            <th className="py-2 border-b border-r-gray-400 "><div className='px-4 w-full border-r-2 border-gray-300'><input type="checkbox" id="checkbox" className="mr-2"/></div></th>
-            <th className="py-2 border-b border-r-gray-300 text-start "><div className='px-4 w-full border-r-2 border-gray-300'>BUG DETAILS</div></th>
-            <th className="py-2 border-b border-r-gray-300 text-start"><div className='px-4 w-full border-r-2 border-gray-300'>STATUS</div></th>
-            <th className="py-2 border-b border-r-gray-300 "><div className='px-4 w-full border-r-2 border-gray-300'>DUE DATE</div></th>
-            <th className="py-2 border-b border-r-gray-300 "><div className='px-4 w-full border-r-2 border-gray-300'>ASSIGNED TO</div></th>
-            <th className=""><div className=''>ACTION</div></th>
-
-          </tr>
-        </thead>
-        <tbody>
-        {rows.map((row, index) => (
-          <tr key={index} className="border-b">
-            <td className='text-center text-custom-text-sm'> 
-              <input type="checkbox" id="checkbox" className="mr-2"/>
-            </td>
-            <td className="py-2 px-4 text-custom-text-sm text-sm">
-              {truncateText(row.details)}
-            </td>
-            <td className={`py-2 px-4`}>
-              <span className={` ${getStatusColor(row.status)} py-1 rounded`}>{row.status}</span>
-            </td>
-            <td className="py-2 px-4">
-              <FaRegCalendarMinus className='text-gray-400 w-full'/>
-            </td>
-            <td className="py-2 px-4 flex space-x-2 items-center justify-center">
-              <AvatarGroup className="text-gray-600 px-0 text-xl"/>
-              {/* Render user avatars if available */}
-            </td>
-            <td className='relative'>
-                <div className='relative'>
-                  <FaEllipsisV 
-                    className='text-gray-600 w-full text-center cursor-pointer'
-                    onClick={() => handleToggleMenu(index)}
-                  />
-                  {openMenuIndex === index && (
-                    <div ref={menuRef}>
-                      <Menu onClose={handleCloseMenu} />
+    <>
+      {!loading ? (
+        error ? (
+          <section className="container mx-auto py-4 text-red-500">
+            <p>{error}</p>
+          </section>
+        ) : (
+          <section className="container mx-auto py-4">
+            <table className="w-full bg-white border border-gray-200">
+              <thead className="bg-gray-100 text-sm text-gray-500">
+                <tr>
+                  <th className="py-2 border-b border-r-gray-400">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      <input type="checkbox" id="checkbox" className="mr-2" aria-label="Select all" />
                     </div>
-                  )}
-                </div>
-              </td>
-          </tr>
-        ))}
-      </tbody>  
-      </table>
-    {/* </div> */}
-
-    </section>
-  )
+                  </th>
+                  <th className="py-2 border-b border-r-gray-300 text-start">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      BUG DETAILS
+                    </div>
+                  </th>
+                  <th className="py-2 border-b border-r-gray-300 text-center">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      STATUS
+                    </div>
+                  </th>
+                  <th className="py-2 border-b border-r-gray-300">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      DUE DATE
+                    </div>
+                  </th>
+                  <th className="py-2 border-b border-r-gray-300">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      ASSIGNED TO
+                    </div>
+                  </th>
+                  <th className="py-2 border-b border-r-gray-300">
+                    <div className="px-4 w-full border-r-2 border-gray-300">
+                      ACTION
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item, index) => (
+                  <tr key={index} className="border-b relative">
+                    <td className="text-center text-custom-text-sm">
+                      <input type="checkbox" id={`checkbox-${index}`} className="mr-2" aria-label={`Select item ${index}`} />
+                    </td>
+                    <td className="py-2 px-4 text-custom-text-sm text-sm">
+                      {truncateText(item.description)}
+                    </td>
+                    <td className="py-2 px-4 text-center">
+                      <span
+                        className={`${getStatusColor(item.status)} py-1 rounded w-24 inline-block`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 text-center">
+                      <span className="text-gray-400">
+                        {formatDate(item.deadline)}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 flex space-x-2 items-center justify-center">
+                      <AvatarGroup className="text-gray-600 px-0 text-xl"/>
+                    </td>
+                    <td className="py-2 px-4 text-center relative">
+                      <button
+                        className="text-gray-600 hover:text-gray-900"
+                        onClick={() => handleToggleMenu(index)}
+                        aria-label={`More options for item ${index}`}
+                      >
+                        <FaEllipsisV />
+                      </button>
+                      {openMenuIndex === index && (
+                        <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg">
+                          <Menu onClose={handleCloseMenu} />
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )
+      ) : (
+        <Backdrop open={loading} className="flex items-center justify-center">
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
+    </>
+  );
 }
 
-export default Table
+export default Table;

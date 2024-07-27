@@ -5,22 +5,76 @@ import { IoMdMail } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
 import { IoPhonePortrait } from "react-icons/io5";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Spinner } from "@material-tailwind/react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import  validationSchema from './Controller/FormValidation'
 
 function SignUp() {
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email").required("Email is required"),
-    phone: Yup.string()
-      .required("Phone number is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-  });
+  const navigate = useNavigate();
 
-  const handleSubmitForm = (values) => {
-    console.log(values);
+  const [role, setRole] = useState('');
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const roleParam = params.get('role');
+    if (roleParam) {
+      setRole(roleParam);
+      console.log('Selected role:', roleParam);
+    }
+  }, [location]);
+
+
+  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setLoading(true);
+      const formData = {
+        ...values,
+        user_type: role
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      };
+
+    console.log(formData)
+
+      const response = await fetch(
+        "http://localhost:4444/auth/register",
+        requestOptions
+      );
+      const responseBody = await response.json();
+      console.log(responseBody);
+      if (!response.ok) {
+        if (responseBody.statusCode == 409) {
+          toast.error("Email already exists", { autoClose: 2000 });
+        }
+        return;
+      }
+      setLoading(false);
+      setTimeout(() => {
+        toast.success("Register Account Sucessfully", { autoClose: 1000 });
+        resetForm();
+        navigate('/signIn')
+      }, 1000);
+    } catch (error) {
+      toast.error("Something wrong. Try again later.", {
+        autoClose: 2000,
+      });
+      console.error("There was a problem with the POST request:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const formik = useFormik({
@@ -35,7 +89,7 @@ function SignUp() {
     onSubmit: handleSubmitForm,
   });
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit,isSubmitting, } =
     formik;
 
   return (
@@ -170,7 +224,15 @@ function SignUp() {
             
           </div>
 
-          <button  type="submit" className="bg-blue-500 hover:bg-blue-700 w-[3\0%] text-white font-bold py-4 px-4 rounded flex text-custom-sm items-center">
+          <button  type="submit"
+            disabled={isSubmitting || loading} 
+            className="bg-blue-500 hover:bg-blue-700 w-[3\0%] text-white font-bold py-4 px-4 rounded flex text-custom-sm items-center">
+              {loading && (
+              <span className="mr-4">
+                <Spinner color="blue" />
+              </span>
+            )}
+
             Sign Up
             <FaGreaterThan className="ml-6" />
           </button>
@@ -186,6 +248,7 @@ function SignUp() {
           </div>
         </div>
       </form>
+      <ToastContainer position="top-right" style={{ marginTop: "0rem" }} />
     </div>
   );
 }

@@ -11,7 +11,7 @@ const Navbar = () => {
     <div className="">
       <div className="container mx-auto flex justify-between items-center py-4 ">
         <div className="flex items-center space-x-2 w-1/4  ">
-        <Link to="/"  className='flex items-center'>
+        <Link to="app/"  className='flex items-center'>
         <img src={Group} alt="Logo" className="h-7 pr-2" />
           <h1 className="text-xl text-gray-700"> <span className='font-bold'>Manage</span>Bug</h1>
         </Link>
@@ -20,7 +20,7 @@ const Navbar = () => {
 
         {/* Middle: Navigation Links */}
         <div className="flex space-x-16 text-2xl ">
-          <Link to="/" className="flex items-center space-x-2 text-gray-600 ">
+          <Link to="/app" className="flex items-center space-x-2 text-gray-600 ">
             < TbBrandDatabricks className='gap-3 hover:text-blue-600' />
             <span className='text-custom-sm' >Projects</span>
           </Link>
@@ -28,11 +28,11 @@ const Navbar = () => {
             <BsCardChecklist className='hover:text-blue-600' />
             <span className='text-custom-sm'>Tasks</span>
           </Link>
-          <Link to="/" className="flex items-center space-x-2 text-gray-600 ">
+          <Link to="/app" className="flex items-center space-x-2 text-gray-600 ">
             < TbChartCircles className='hover:text-blue-600' />
             <span className='text-custom-sm'>Manage</span>
           </Link>
-          <Link to="/" className="flex items-center space-x-2 text-gray-600 ">
+          <Link to="/app" className="flex items-center space-x-2 text-gray-600 ">
             <  LuUsers className='hover:text-blue-600 '/>
             <span className='text-custom-sm'>Users</span>
           </Link>
