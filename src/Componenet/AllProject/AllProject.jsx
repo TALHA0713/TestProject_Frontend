@@ -6,13 +6,15 @@ import Card from '../Card/Card';
 import axios from 'axios';
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
-import DisableButton from './DisableButton'; // Adjust the import path
+import DisableButton from './DisableButton';
+import { useNavigate } from 'react-router-dom';
 
 // eslint-disable-next-line react/prop-types
 const AllProject = ({ propHandleClose, propOpen }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +36,7 @@ const AllProject = ({ propHandleClose, propOpen }) => {
         return;
       }
       window.location.href = "/signIn"; 
-    }
+    };
     fetchData();  
   }, []);
 
@@ -44,6 +46,11 @@ const AllProject = ({ propHandleClose, propOpen }) => {
 
   const handleClose = () => {
     setIsOpen(false);
+  };
+
+  // Update handleDivClick to accept id as a parameter
+  const handleDivClick = (id) => () => {
+    navigate(`/showTasks?role=${encodeURIComponent(id)}`);
   };
 
   const handleBugDetailClose = propHandleClose || handleClose;
@@ -88,25 +95,30 @@ const AllProject = ({ propHandleClose, propOpen }) => {
         </button>
       </div>
 
-      {!loading ? (
-        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-12">
-          {data.map((item, index) => (
-            <Card
-              key={index}
-              title={item.name}
-              description={item.detail}
-              taskDone={item.completedBugCount}
-              totalTask={item.totalBugCount}
-            />
-          ))}
-        </div>
-      ) : (
+      {loading ? (
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open
         >
           <CircularProgress color="inherit" />
         </Backdrop>
+      ) : (
+        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-12">
+          {data.map((item, index) => (
+            <div 
+              key={index}
+              className="cursor-pointer"
+              onClick={handleDivClick(item.id)} // Pass the function reference
+            >
+              <Card
+                title={item.name}
+                description={item.detail}
+                taskDone={item.completedBugCount}
+                totalTask={item.totalBugCount}
+              />
+            </div>
+          ))}
+        </div>
       )}
 
       {/* ProjectModal Component */}

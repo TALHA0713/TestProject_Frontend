@@ -18,9 +18,7 @@ const DisableButton = ({ handleOpen }) => {
           const userId = tokenPayload.id.toString();
           console.log(userId)
           const response = await axios.get(`http://localhost:4444/api/getSingleUser/${userId}`);
-          console.log(response)
           setUserType(response.data.user_type);
-          console.log(userType)
           setLoading(false);
         } catch (error) {
           console.error('Error decoding token:', error);

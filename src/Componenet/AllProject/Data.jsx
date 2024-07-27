@@ -1,14 +1,15 @@
-import AvatarGroup from "../Avatar/AvatarGroup";
-import { FaEllipsisV } from "react-icons/fa";
-import Menu from "./Menu";
 import { useState, useEffect, useRef } from "react";
+import { FaEllipsisV } from "react-icons/fa";
+import Menu from '../BugList/Menu';
+import AvatarGroup from "../Avatar/AvatarGroup";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import { toast } from "react-toastify"; // Add toast for error notifications
 
-// eslint-disable-next-line react/prop-types
-function Table() {
+function Data() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('role');
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -39,43 +40,35 @@ function Table() {
       const token1 = sessionStorage.getItem('token');
       if (token1) {
         try {
-          const decodedToken = JSON.parse(token1);
-          const token = decodedToken.token;
-          const arrayToken = token.split('.');
-          const tokenPayload = JSON.parse(atob(arrayToken[1]));
-          const userId = tokenPayload.id.toString();
-
-          try {
-            const response = await axios.get(`http://localhost:4444/api/getBugsForDeveloper/${userId}`);
-            
-            if (response.status === 200) {
-              setData(response.data);
+          const response = await axios.get(`http://localhost:4444/api/getBugByProjectId/${id}`);
+          
+          if (response.status === 200) {
+            const bugs = response.data.bugs;
+            if (Array.isArray(bugs)) {
+              setData(bugs);
             } else {
-              
-              const errorMessage = response.data.error || 'Error fetching data. Please try again later.';
+              const errorMessage = 'Unexpected data format received.';
               setError(errorMessage);
               toast.error(errorMessage);
             }
-          } catch (error) {
-            
-            const errorMessage = error.response?.data?.error || 'Error fetching data. Please try again later.';
+          } else {
+            const errorMessage = response.data.error || 'Error fetching data. Please try again later.';
             setError(errorMessage);
             toast.error(errorMessage);
           }
           setLoading(false);
         } catch (error) {
-          const errorMessage = 'Error decoding token. Please try again later.';
+          const errorMessage = error.response?.data?.error || 'Error fetching data. Please try again later.';
           setError(errorMessage);
           toast.error(errorMessage);
           setLoading(false);
         }
-        return;
+      } else {
+        window.location.href = '/signIn'; 
       }
-      window.location.href = '/signIn'; 
     };
     fetchData();
-  }, []);
-
+  }, [id]);
 
   function formatDate(datetime) {
     const date = new Date(datetime);
@@ -154,7 +147,7 @@ function Table() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item, index) => (
+                {Array.isArray(data) && data.map((item, index) => (
                   <tr key={index} className="border-b relative">
                     <td className="text-center text-custom-text-sm">
                       <input type="checkbox" id={`checkbox-${index}`} className="mr-2" aria-label={`Select item ${index}`} />
@@ -206,4 +199,4 @@ function Table() {
   );
 }
 
-export default Table;
+export default Data;

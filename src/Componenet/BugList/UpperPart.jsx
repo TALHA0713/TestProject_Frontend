@@ -42,8 +42,8 @@ function UpperPart({ propHandleClose, propOpen }) {
           <FaEllipsisH className='text-custom-lg text-gray-600'/>
         </div>
         <button className='bg-blue-500 text-white py-3 px-12 rounded flex items-center' onClick={handleOpen}>
-          <FaPlus className='text-xs pr-2' />
-          New Bug Task
+          <FaPlus className='text-3xs pr-2' />
+          New bug
         </button>
       </div>
       <NewBugModal open={isDetailOpen} handleClose={handleBugDetailClose} />

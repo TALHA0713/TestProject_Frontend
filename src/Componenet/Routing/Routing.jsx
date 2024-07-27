@@ -6,6 +6,7 @@ import Main from "../BugList/Main";
 import SignIn from "../SignIn";
 import UserType from "../UserType";
 import SignUp from "../SignUp";
+import DisplayTask from '../AllProject/DisplayTask';
 
 const Routing = () => {
   const isLoggedIn = sessionStorage.getItem("loggedIn");
@@ -31,6 +32,7 @@ const Routing = () => {
             <Routes>
               <Route path="/app" element={<AllProject />} />
               <Route path="/Task" element={<Main />} />
+              <Route path="/ShowTasks" element={<DisplayTask />} />
               <Route path="/login" element={<Navigate to="/app" />} />
               <Route path="/register" element={<Navigate to="/app" />} />
               <Route path="*" element={<Navigate to="/app" />} />
