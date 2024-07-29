@@ -1,48 +1,104 @@
-import { CiCalendarDate } from "react-icons/ci";
-import { useState } from "react";
-import AvatarGroup from '../Avatar/AvatarGroup'
-function MiddlePart() {
+import { useState, useEffect } from 'react';
+import AssignTo from "../../Modal/AssignTo";
+import Project from './ProjectId';
+import BasicDatePicker from './Date';
+import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
-  const [showCalendar, setShowCalendar] = useState(false);
-  const handleCalendarClick = () => {
-    setShowCalendar(!showCalendar);
+// eslint-disable-next-line react/prop-types
+function MiddlePart({ formData, setFormData }) {
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleUserSelection = (selectedUserId) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      assigned_to: selectedUserId,
+    }));
+    console.log("Selected User ID:", selectedUserId);
   };
+
+  const handleProjectSelection = (projectId) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      project_id: projectId,
+    }));
+    console.log("Selected Project ID:", projectId);
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+    setFormData((prevData) => ({
+      ...prevData,
+      deadline: formattedDate,
+    }));
+    console.log("Selected Date:", formattedDate);
+  };
+
+  useEffect(() => {
+    const token1 = sessionStorage.getItem("token");
+    if (token1) {
+      try {
+        const decodedToken = JSON.parse(token1);
+        const tokenPayload = JSON.parse(atob(decodedToken.token.split(".")[1]));
+        setFormData((prevData) => ({
+          ...prevData,
+          created_by: tokenPayload.id.toString(),
+        }));
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    } else {
+      navigate("/signIn");
+    }
+  }, [navigate, setFormData]);
+
   return (
-   <>
-        
-        <div className="flex items-center py-5 px-5 space-x-4">
-            <h1 className="mr-7">Assign to</h1>
-            <div className="flex items-center">
-             <AvatarGroup/>
-            </div>
-            <h1 className="ml-7">Add Due Date</h1>
-            <div
-              className="border-2 border-gray-300 border-dashed rounded-full h-[50px] w-[50px] flex items-center justify-center cursor-pointer"
-              onClick={handleCalendarClick}
-            >
-              <CiCalendarDate className="text-3xl" />
-            </div>
-            {showCalendar && <div className="absolute mt-4"></div>}
-          </div>
+    <>
+      <div className="pt-5 px-5 flex space-x-4">
+        <div className="flex-1">
+          <AssignTo 
+            onChange={handleUserSelection} 
+            isDeveloperOnly={true}
+          />
+        </div>
+        <div className="flex-1"> 
+          <Project onChange={handleProjectSelection} />
+        </div>
+        <div className="flex-1">
+          <BasicDatePicker
+            selectedDate={selectedDate}
+            onDateChange={handleDateChange}
+          />
+        </div>
+      </div>
 
-          <div className="py-3">
-            <input
-              type="text"
-              placeholder="Add tittle here"
-              className="w-full px-4 py-4 rounded-sm text-gray-500  border-none text-5xl font-poppins    "
-            />
-          </div>
+      <form className="mb-2">
+        <input
+          type="text"
+          placeholder="Add title here"
+          // eslint-disable-next-line react/prop-types
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          className="w-full px-4 py-4 border-none text-4xl font-poppins"
+        />
+      </form>
 
-          <span className="px-4 py-4">Bug details</span>
-          <div className="px-3 py-3">
-            <input
-              type="text"
-              placeholder="Enter details here..."
-              className="w-full px-4 py-4 border-2 border-gray-100 rounded-lg focus:outline-none focus:border-gray-500"
-            />
-          </div>
-   </>
-  )
+      <span className="px-4 py-4">Bug details</span>
+      <div className="px-3 py-3">
+        <input
+          type="text"
+          placeholder="Enter details here..."
+          // eslint-disable-next-line react/prop-types
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full px-4 py-4 border-2 border-gray-100 rounded-lg focus:outline-none focus:border-gray-500"
+        />
+      </div>
+    </>
+  );
 }
 
-export default MiddlePart
+export default MiddlePart;

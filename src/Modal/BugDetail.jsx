@@ -3,6 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import LeftComponent from "../Componenet/BugDetailComponent/LeftComponent";
 import RightComponent from "../Componenet/BugDetailComponent/RightComponent";
 
+// eslint-disable-next-line react/prop-types
 const BugDetail = ({ open, handleClose }) => {
   return (
     <Modal

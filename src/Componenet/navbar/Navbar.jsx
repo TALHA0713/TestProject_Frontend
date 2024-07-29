@@ -5,8 +5,15 @@ import { LuUsers } from "react-icons/lu";
 import Group from '../../assets/Group.png'
 import VisnextLogo from  '../../assets/Ellipse.png'
 import { Link } from 'react-router-dom';
-
 const Navbar = () => {
+
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem('loggedIn')
+    window.location.href = '/signIn';
+  };
+
   return (
     <div className="">
       <div className="container mx-auto flex justify-between items-center py-4 ">
@@ -43,12 +50,15 @@ const Navbar = () => {
           <FaEnvelope className="text-gray-600 hover:text-blue-600" />
 
           <div className="flex items-center space-x-5 bg-gray-200 rounded px-5 py-2">
+            <button className='flex items-center justify-center space-x-3' onClick={handleLogout}>
             <img src={VisnextLogo} alt="visnextLogo" />
             <span className="text-gray-600 text-custom-md  ">Dev.</span>
-            <button>
+          
             <FaAngleDown className="text-gray-600 hover:text-blue-600" />
+    
             </button>
-          </div>
+            </div>
+            
         </div>
         
       </div>

@@ -16,7 +16,6 @@ const DisableButton = ({ handleOpen }) => {
           const arrayToken = token.split('.');
           const tokenPayload = JSON.parse(atob(arrayToken[1]));
           const userId = tokenPayload.id.toString();
-          console.log(userId)
           const response = await axios.get(`http://localhost:4444/api/getSingleUser/${userId}`);
           setUserType(response.data.user_type);
           setLoading(false);
