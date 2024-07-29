@@ -108,7 +108,7 @@ const AllProject = ({ propHandleClose, propOpen }) => {
             <div 
               key={index}
               className="cursor-pointer"
-              onClick={handleDivClick(item.id)} // Pass the function reference
+              onClick={handleDivClick(item.id)}
             >
               <Card
                 title={item.name}

@@ -16,14 +16,14 @@ const ProjectModal = ({ open, handleClose }) => {
     name: "",
     detail: "",
     manager_id: "",
-    selectedUserId: "", // Single user ID
+    project_assignto: "", 
   });
 
   const handleUserSelection = (userIds) => {
-    const selectedUserId = userIds.length > 0 ? userIds[0] : "";
+    const project_assignto = userIds
     setFormData((prevData) => ({
       ...prevData,
-      selectedUserId,
+      project_assignto,
     }));
   };
 
@@ -46,7 +46,6 @@ const ProjectModal = ({ open, handleClose }) => {
     }
   }, [navigate]);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -60,7 +59,9 @@ const ProjectModal = ({ open, handleClose }) => {
     e.preventDefault();
     setIsPending(true);
 
+    
     try {
+      console.log(formData)
       const response = await fetch("http://localhost:4444/api/addProject", {
         method: "POST",
         headers: {
@@ -75,15 +76,13 @@ const ProjectModal = ({ open, handleClose }) => {
         handleErrorResponse(responseBody);
         return;
       }
-
-      // Reset form data and close modal
       setFormData({
         name: "",
         detail: "",
         manager_id: "",
-        selectedUserId: "",
+        project_assignto: "",
       });
-
+      window.location.reload();
       handleClose();
     } catch (error) {
       toast.error("Server does not respond, please try again later", {

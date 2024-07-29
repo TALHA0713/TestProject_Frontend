@@ -28,14 +28,27 @@ function MiddlePart({ formData, setFormData }) {
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
-    setFormData((prevData) => ({
-      ...prevData,
-      deadline: formattedDate,
-    }));
-    console.log("Selected Date:", formattedDate);
-  };
+    
+    const today = dayjs().startOf('day'); 
+    const selectedDate = dayjs(date).startOf('day'); 
+
+    if (selectedDate.isAfter(today)) {
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : null;
+        setSelectedDate(date);
+        setFormData((prevData) => ({
+            ...prevData,
+            deadline: formattedDate,
+        }));
+    } else {
+        
+        alert('The selected date must be greater than today\'s date.');
+        // setSelectedDate(null);
+        // setFormData((prevData) => ({
+        //     ...prevData,
+        //     deadline: null,
+        // }));
+    }
+};
 
   useEffect(() => {
     const token1 = sessionStorage.getItem("token");

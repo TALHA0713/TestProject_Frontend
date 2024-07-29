@@ -54,7 +54,7 @@ const NewBugModal = ({ open, handleClose }) => {
         type: 'bug',    
         status: 'new'   
       });
-
+      window.location.reload();
       handleClose();
     } catch (error) {
       toast.error("Server does not respond, please try again later", {

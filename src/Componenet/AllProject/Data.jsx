@@ -5,8 +5,8 @@ import AvatarGroup from "../Avatar/AvatarGroup";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
-import { toast } from "react-toastify"; // Add toast for error notifications
-
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 function Data() {
   const params = new URLSearchParams(location.search);
   const id = params.get('role');
@@ -58,7 +58,7 @@ function Data() {
           }
           setLoading(false);
         } catch (error) {
-          const errorMessage = error.response?.data?.error || 'Error fetching data. Please try again later.';
+          const errorMessage = error.response?.data?.error || 'No Bugs Found in this project.';
           setError(errorMessage);
           toast.error(errorMessage);
           setLoading(false);
@@ -147,7 +147,7 @@ function Data() {
                 </tr>
               </thead>
               <tbody>
-                {Array.isArray(data) && data.map((item, index) => (
+                {Array.isArray(data) && data.map    ((item, index) => (
                   <tr key={index} className="border-b relative">
                     <td className="text-center text-custom-text-sm">
                       <input type="checkbox" id={`checkbox-${index}`} className="mr-2" aria-label={`Select item ${index}`} />
@@ -195,6 +195,7 @@ function Data() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
+      <ToastContainer position="top-right" style={{ marginTop: "0rem" }} />
     </>
   );
 }

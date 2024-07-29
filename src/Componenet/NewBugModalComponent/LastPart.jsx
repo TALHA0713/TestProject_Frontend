@@ -10,7 +10,6 @@ const  LastPart=() => {
     };
   
     const handleFileChange = (event) => {
-      // Handle file selection here
       console.log(event.target.files[0]);
     };
     

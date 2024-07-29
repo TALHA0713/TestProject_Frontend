@@ -18,7 +18,7 @@ function AssignTo({ onChange, isDeveloperOnly }) {
           
           if (response.status === 200) {
             const users = response.data;
-            console.log(isDeveloperOnly);
+            
             if (Array.isArray(users)) {
               
               const filteredUsers = users

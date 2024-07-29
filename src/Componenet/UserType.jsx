@@ -50,7 +50,7 @@ function UserType() {
       {data.map((role, index) => (
         <div
           key={index}
-          className="flex items-center gap-4 border-2 hover:border-blue-500 p-4 flex-1 hover:bg-gray-100 rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px] group"
+          className="flex items-center gap-4 border-2 hover:border-blue-500 p-4 flex-1 hover:bg-gray-100 hover:cursor-pointer rounded-lg min-h-[30px] md:min-h-[70px] lg:min-h-[100px] group"
           onClick={() => handleRoleClick(role)}
         >
           <div className="flex-shrink-0">

@@ -10,11 +10,10 @@ function Menu({ onClose }) {
 
   const handleStatusClick = (status) => {
     console.log(`${status} clicked`);
-    onClose(); // Close the menu after action
+    onClose(); 
   };
 
   const handleDelete = () => {
-  
     console.log("Delete clicked");
     onClose(); 
   };
